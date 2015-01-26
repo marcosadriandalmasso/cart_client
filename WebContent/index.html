@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Cart client</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" />
+<script src="jquery/jquery-1.11.1.min.js"></script>
+<script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			loadProducts();
+		});
+
+		function loadProducts() {
+			$('#productList').empty();
+			$.get('service/products', function(json) {
+				var data = jQuery.parseJSON(json).results;
+				for (productPos in data) {
+					product = data[productPos];
+					var row = $("<li>");
+					row.append($("<input type='button' value='+'>"));
+					row.append("&nbsp;");
+					row.append(product.name + " - $" + product.price);
+					$('#productList').append(row);
+				}
+				 $("#productList").listview("refresh");
+			});
+		}
+	</script>
+	<div data-role="page">
+		<div data-role="header">
+			<h1>Productos</h1>
+		</div>
+		<div role="main" class="ui-content">
+			<ul data-role="listview" id="productList">
+				<li>Acura</li>
+				<li>Audi</li>
+				<li>BMW</li>
+				<li>Cadillac</li>
+				<li>Ferrari</li>
+			</ul>
+		</div>
+		<div data-role="footer">
+			<h4>(c) 2015 Los Borbotones Software Company Inc.</h4>
+		</div>
+	</div>
+
+	<div data-role="page">
+		<div data-role="header">
+			<h1>Productos</h1>
+		</div>
+		<div role="main" class="ui-content">
+			<ul data-role="listview">
+				<li>Fitito</li>
+				<li>R12</li>
+			</ul>
+		</div>
+		<div data-role="footer">
+			<h4>(c) 2015 Los Borbotones Software Company Inc.</h4>
+		</div>
+	</div>
+</body>
+</html>

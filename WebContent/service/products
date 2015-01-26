@@ -1,0 +1,17 @@
+{ "results" : [
+	{
+		"id": 1,
+		"name": "Coca Cola",
+		"price": 15.50
+	},
+	{
+		"id": 2,
+		"name": "Fernet 750cc",
+		"price": 75.83
+	},
+	{
+		"id": 3,
+		"name": "Quilmes 1l",
+		"price": 13.26
+	}
+]}
