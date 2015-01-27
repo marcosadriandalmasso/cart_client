@@ -10,53 +10,144 @@
 </head>
 <body>
 	<script type="text/javascript">
-		$(document).ready(function() {
-			loadProducts();
-		});
-
-		function loadProducts() {
+		function goToLogin() {
+			$.mobile.navigate("#loginPage");
+		}
+		function goToCart() {
+			$.mobile.navigate("#cartPage");
+			refreshCart();
+		}
+		function goToProducts() {
+			$.mobile.navigate("#productsPage");
+			refreshProducts();
+		}
+		function login() {
+			$.post('service/login',
+			{
+				"username": $("#username").val(),
+				"password": $("#password").val()
+			},
+			function(json) {
+				var data = jQuery.parseJSON(json);
+				if (data.ok) {
+					goToCart();
+				} else {
+					alert("Error de login");
+				}
+			});
+		}
+		function refreshCart() {
+			$('#cartList').empty();
+			$.get('service/cart', function(json) {
+				var data = jQuery.parseJSON(json).results;
+				var total = 0;
+				for (itemPos in data) {
+					item = data[itemPos];
+					var row = $("<li>");
+					row.append(item.quantity + " " + item.productName + " - $" + item.amount);
+					row.append("&nbsp;");
+					row.append($("<input type='button' value='-' onClick='removeProduct(" + item.productId+ ");'>"));
+					$('#cartList').append(row);
+					total += item.amount;
+				}
+				$('#cartList').append($("<li>").append("Total: $" + total));
+				$("#cartList").listview("refresh");
+			});
+		}
+		function checkout() {
+			if (confirm("Va a enviar el carrito. ¿Está seguro?")) {
+				$.get('service/checkout',
+				function(json) {
+					var data = jQuery.parseJSON(json);
+					if (data.ok) {
+						refreshCart();
+					} else {
+						alert("Error de checkout");
+					}
+				});
+			}
+		}
+		function addProduct(productId) {
+			$.get('service/add/' + productId,
+			function(json) {
+				var data = jQuery.parseJSON(json);
+				if (data.ok) {
+					goToCart();
+				} else {
+					alert("Error agregando producto");
+				}
+			});
+		}
+		function removeProduct(productId) {
+			$.get('service/remove/' + productId,
+			function(json) {
+				var data = jQuery.parseJSON(json);
+				if (data.ok) {
+					goToCart();
+				} else {
+					alert("Error removiendo producto");
+				}
+			});
+		}
+		function refreshProducts() {
 			$('#productList').empty();
 			$.get('service/products', function(json) {
 				var data = jQuery.parseJSON(json).results;
 				for (productPos in data) {
 					product = data[productPos];
 					var row = $("<li>");
-					row.append($("<input type='button' value='+'>"));
-					row.append("&nbsp;");
 					row.append(product.name + " - $" + product.price);
+					row.append("&nbsp;");
+					row.append($("<input type='button' value='+' onClick='addProduct(" + product.id + ");'>"));
 					$('#productList').append(row);
 				}
 				 $("#productList").listview("refresh");
 			});
 		}
 	</script>
-	<div data-role="page">
+
+	<div data-role="page" id="loginPage">
 		<div data-role="header">
-			<h1>Productos</h1>
+			<h1>Login</h1>
 		</div>
 		<div role="main" class="ui-content">
-			<ul data-role="listview" id="productList">
-				<li>Acura</li>
-				<li>Audi</li>
-				<li>BMW</li>
-				<li>Cadillac</li>
-				<li>Ferrari</li>
-			</ul>
+			<div class="ui-field-contain">
+				<label for="username">Username:</label>
+				<input type="text" id="username" value="" />
+				<label for="password">Password:</label>
+				<input type="password" id="password" value="" />
+			</div>
+			<input type="button" id="login" value="Login" onclick="login();" />
 		</div>
 		<div data-role="footer">
 			<h4>(c) 2015 Los Borbotones Software Company Inc.</h4>
 		</div>
 	</div>
 
-	<div data-role="page">
+	<div data-role="page" id="cartPage">
+		<div data-role="header">
+			<h1>Carrito</h1>
+		</div>
+		<div role="main" class="ui-content">
+			<input type='button' value='Refrescar' onclick="refreshCart();" />
+			<input type='button' value='Productos' onclick="goToProducts();" />
+			<input type='button' value='Checkout' onclick="checkout();" />
+			<input type='button' value='Logout' onclick="goToLogin();" />
+			<ul data-role="listview" id="cartList" style="margin-top: 10px"/>
+		</div>
+		<div data-role="footer">
+			<h4>(c) 2015 Los Borbotones Software Company Inc.</h4>
+		</div>
+	</div>
+
+	<div data-role="page" id="productsPage">
 		<div data-role="header">
 			<h1>Productos</h1>
 		</div>
 		<div role="main" class="ui-content">
-			<ul data-role="listview">
-				<li>Fitito</li>
-				<li>R12</li>
-			</ul>
+			<input type='button' value='Refrescar' onclick="refreshProducts();" />
+			<input type='button' value='Volver al carrito' onclick="goToCart();" />
+			<ul data-role="listview" id="productList" style="margin-top: 10px"/>
 		</div>
 		<div data-role="footer">
 			<h4>(c) 2015 Los Borbotones Software Company Inc.</h4>
