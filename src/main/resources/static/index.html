@@ -22,27 +22,26 @@
 			refreshProducts();
 		}
 		function login() {
-			$.post('service/login',
-			{
-				"username": $("#username").val(),
-				"password": $("#password").val()
-			},
-			function(json) {
-				var data = jQuery.parseJSON(json);
-				if (data.ok) {
-					goToCart();
-				} else {
-					alert("Error de login");
+			post('service/login',
+				{
+					"username": $("#username").val(),
+					"password": $("#password").val()
+				},
+				function(data) {
+						if (data.ok) {
+							goToCart();
+						} else {
+							alert("Error de login");
+						}
 				}
-			});
+				);
 		}
 		function refreshCart() {
 			$('#cartList').empty();
-			$.get('service/cart', function(json) {
-				var data = jQuery.parseJSON(json).results;
+			get('service/cart', function(data) {
 				var total = 0;
-				for (itemPos in data) {
-					item = data[itemPos];
+				for (itemPos in data.results) {
+					item = data.results[itemPos];
 					var row = $("<li>");
 					row.append(item.quantity + " " + item.productName + " - $" + item.amount);
 					row.append("&nbsp;");
@@ -56,9 +55,8 @@
 		}
 		function checkout() {
 			if (confirm("Va a enviar el carrito. ¿Está seguro?")) {
-				$.get('service/checkout',
-				function(json) {
-					var data = jQuery.parseJSON(json);
+				get('service/checkout',
+				function(data) {
 					if (data.ok) {
 						refreshCart();
 					} else {
@@ -68,9 +66,8 @@
 			}
 		}
 		function addProduct(productId) {
-			$.get('service/add/' + productId,
-			function(json) {
-				var data = jQuery.parseJSON(json);
+			get('service/add/' + productId,
+			function(data) {
 				if (data.ok) {
 					goToCart();
 				} else {
@@ -79,9 +76,8 @@
 			});
 		}
 		function removeProduct(productId) {
-			$.get('service/remove/' + productId,
-			function(json) {
-				var data = jQuery.parseJSON(json);
+			get('service/remove/' + productId,
+			function(data) {
 				if (data.ok) {
 					goToCart();
 				} else {
@@ -91,18 +87,37 @@
 		}
 		function refreshProducts() {
 			$('#productList').empty();
-			$.get('service/products', function(json) {
-				var data = jQuery.parseJSON(json).results;
-				for (productPos in data) {
-					product = data[productPos];
+			get('service/products', function(data) {
+				for (productPos in data.results) {
+					product = data.results[productPos];
 					var row = $("<li>");
 					row.append(product.name + " - $" + product.price);
 					row.append("&nbsp;");
 					row.append($("<input type='button' value='+' onClick='addProduct(" + product.id + ");'>"));
 					$('#productList').append(row);
 				}
-				 $("#productList").listview("refresh");
+				$("#productList").listview("refresh");
 			});
+		}
+		function get(url, success) {
+			$.ajax({
+				  url: url,
+				  type: "GET",
+				  data: "",
+				  contentType:"application/json; charset=utf-8",
+				  dataType:"json",
+				  success: success
+				});
+		}
+		function post(url, data, success) {
+			$.ajax({
+				  url: url,
+				  type: "POST",
+				  data: JSON.stringify(data),
+				  contentType:"application/json; charset=utf-8",
+				  dataType:"json",
+				  success: success
+				});
 		}
 	</script>
 
