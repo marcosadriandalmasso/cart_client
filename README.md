@@ -10,6 +10,7 @@ Más datos:
 * Se asume que la aplicación es stateful. Por ejemplo, una vez ejecutado el login, la aplicación debería almacenar el usuario en la sesión, del lado del servidor.
 * El login es el único servicio que usa POST en lugar de GET, dado que no es recomendable mostrar información sensible como usuario o password en la URL.
 * Este es el link a la demo: http://carrito-bootcamp.appspot.com.
+* Se utiliza Maven para generar el proyecto. Para correrlo desde eclipse, debe crearse un proyecto ejecutando mvn eclipse:eclipse.
 
 ## Servicios
 
