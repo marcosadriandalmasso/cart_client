@@ -11,6 +11,7 @@ Más datos:
 * El login es el único servicio que usa POST en lugar de GET, dado que no es recomendable mostrar información sensible como usuario o password en la URL.
 * Este es el link a la demo: http://carrito-bootcamp.appspot.com.
 * Se utiliza Maven para generar el proyecto. Para correrlo desde eclipse, debe crearse un proyecto ejecutando mvn eclipse:eclipse.
+* Se puede probar localmente ejecutando la clase `com.globant.carrito.CarritoApplication` y accediendo a http://localhost:8080
 
 ## Servicios
 
