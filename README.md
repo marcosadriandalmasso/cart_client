@@ -2,10 +2,10 @@
 ## Objetivo
 Este es un proyecto de ejemplo que puede usarse para probar los servicios REST desarrollados por los alumnos.
 ## Implementación
-Esta aplicación contiene código sólamente en el lado del cliente. Las respuestas a los servicios rest están hardcode en el directorio `WebContent/service`. La idea es que el alumno implemente una aplicación que responda a esos servicios de manera dinámica.
+Esta aplicación contiene código en el lado del cliente para implementar un carrito simple. También incluye 2 servicios de ejemplo (login y consulta de productos). La idea es que el alumno implemente tanto la lógica de dichos servicios como los servicios restantes.
 
 Más datos:
-* La aplicación está escrita usando jQuery Mobile.
+* La aplicación está escrita usando jQuery Mobile para el lado del cliente y Spring Boot + Spring Rest del lado del servidor.
 * El formato usado para los mensajes es JSON.
 * Se asume que la aplicación es stateful. Por ejemplo, una vez ejecutado el login, la aplicación debería almacenar el usuario en la sesión, del lado del servidor.
 * El login es el único servicio que usa POST en lugar de GET, dado que no es recomendable mostrar información sensible como usuario o password en la URL.
