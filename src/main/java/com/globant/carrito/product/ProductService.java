@@ -1,3 +1,7 @@
+/**
+ *  CLASS USED AS AN EXAMPLE
+ */
+
 package com.globant.carrito.product;
 
 import org.springframework.web.bind.annotation.RequestMapping;

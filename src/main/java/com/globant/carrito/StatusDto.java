@@ -1,13 +1,13 @@
 package com.globant.carrito;
 
 public class StatusDto {
-	private boolean ok;
+	private boolean status;
 
-	public StatusDto(boolean ok) {
-		this.ok = ok;
+	public StatusDto(boolean status) {
+		this.status = status;
 	}
 
-	public boolean isOk() {
-		return ok;
+	public boolean isstatus() {
+		return status;
 	}
 }
