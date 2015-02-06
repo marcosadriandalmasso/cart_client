@@ -28,7 +28,7 @@
 					"password": $("#password").val()
 				},
 				function(data) {
-						if (data.ok) {
+						if (data.status) {
 							goToCart();
 						} else {
 							alert("Error de login");
@@ -38,16 +38,17 @@
 		}
 		function refreshCart() {
 			$('#cartList').empty();
-			get('service/cart', function(data) {
+			get('service/getCart', function(data) {
 				var total = 0;
 				for (itemPos in data.results) {
 					item = data.results[itemPos];
 					var row = $("<li>");
-					row.append(item.quantity + " " + item.productName + " - $" + item.amount);
+					row.append(item.quantity + " " + item.productName + " - $" + item.amount * item.quantity);
 					row.append("&nbsp;");
 					row.append($("<input type='button' value='-' onClick='removeProduct(" + item.productId+ ");'>"));
+					row.append($("<input type='button' value='+' onClick='addProduct(" + item.productId + ");'>"));
 					$('#cartList').append(row);
-					total += item.amount;
+					total += item.amount * item.quantity;
 				}
 				$('#cartList').append($("<li>").append("Total: $" + total));
 				$("#cartList").listview("refresh");
@@ -57,7 +58,7 @@
 			if (confirm("Va a enviar el carrito. ¿Está seguro?")) {
 				get('service/checkout',
 				function(data) {
-					if (data.ok) {
+					if (data.status) {
 						refreshCart();
 					} else {
 						alert("Error de checkout");
@@ -66,9 +67,9 @@
 			}
 		}
 		function addProduct(productId) {
-			get('service/add/' + productId,
+			get('service/newItem/' + productId,
 			function(data) {
-				if (data.ok) {
+				if (data.status) {
 					goToCart();
 				} else {
 					alert("Error agregando producto");
@@ -76,9 +77,9 @@
 			});
 		}
 		function removeProduct(productId) {
-			get('service/remove/' + productId,
+			get('service/removeItem/' + productId,
 			function(data) {
-				if (data.ok) {
+				if (data.status) {
 					goToCart();
 				} else {
 					alert("Error removiendo producto");
@@ -87,7 +88,7 @@
 		}
 		function refreshProducts() {
 			$('#productList').empty();
-			get('service/products', function(data) {
+			get('service/getProducts', function(data) {
 				for (productPos in data.results) {
 					product = data.results[productPos];
 					var row = $("<li>");

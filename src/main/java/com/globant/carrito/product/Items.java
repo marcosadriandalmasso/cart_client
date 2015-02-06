@@ -20,19 +20,34 @@ public class Items {
 	private double price;
 	
 	@Column
-	private String description;
+	private int qty;
+
+	public int getQty() {
+		return qty;
+	}
+
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Carts cart;
 	
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Product product;
+	
+	public Product getProduct() {
+		return product;
+	}
+
 	public Items() {
 		
 	}
 	
-	public Items(double price, String description) {
-		super();
+	public Items(double price, Product product, int qty) {
 		this.price = price;
-		this.description = description;
+		this.product = product;
+		this.qty = qty;
 	}
 
 	public double getPrice() {
@@ -41,14 +56,6 @@ public class Items {
 
 	public void setPrice(double price) {
 		this.price = price;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public int getItemId() {

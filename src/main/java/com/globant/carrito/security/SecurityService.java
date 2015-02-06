@@ -2,6 +2,7 @@ package com.globant.carrito.security;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
@@ -17,12 +18,12 @@ import com.globant.carrito.client.Clients;
 
 @RestController
 public class SecurityService {
+	public static final String USERNAME = "username";
 
 	@RequestMapping(value = "/service/login", method=RequestMethod.POST)
 	@ResponseBody
-	public StatusDto login(@RequestBody LoginDto dto) {
-		
-		
+	public StatusDto login(@RequestBody LoginDto dto,HttpSession session) {
+	
 		EntityManagerFactory emf = Persistence
 				.createEntityManagerFactory("db");
 
@@ -30,16 +31,20 @@ public class SecurityService {
 		
 		String username = dto.getUsername();
 		
-		TypedQuery<Clients> query = em.createQuery("from Clients c where c.username : username", Clients.class);
-		query.setParameter("username", username);
-		
-		if(query.getSingleResult() != null) {
-			Clients client = query.getSingleResult();
-			em.close();
-			return new StatusDto(dto.getUsername().equals(client.getUserName())
-					&& dto.getPassword().equals(client.getPassword()));
-		}else{
-			return new StatusDto(false);
+		try {
+		    TypedQuery<Clients> query = em.createQuery("from Clients c where c.userName = :userName", Clients.class);
+		        query.setParameter("userName", username);
+		        Clients client = query.getSingleResult();
+		        boolean isValid = dto.getPassword().equals(client.getPassword());
+		        if (isValid) {
+		        	session.setAttribute(USERNAME, username);
+		        }
+		        return new StatusDto(isValid);
+		} catch (NoResultException e) {
+		               return new StatusDto(false);
+		} finally {
+		              // El finally se invoca igual, aunque haya un return.
+		               em.close();
 		}
 	}
 	

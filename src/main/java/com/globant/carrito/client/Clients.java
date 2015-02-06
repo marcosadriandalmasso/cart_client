@@ -39,7 +39,7 @@ public class Clients {
 	@Column
 	private boolean mailist;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "Clients")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
 	private List<Carts> cart;
 
 	public Clients() {

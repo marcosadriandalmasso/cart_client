@@ -5,8 +5,8 @@ import java.util.List;
 
 public class ItemsResponse {
 
-	private List<Items> results = new ArrayList<Items>();
-	public List<Items> getResults() {
+	private List<ItemsDto> results = new ArrayList<ItemsDto>();
+	public List<ItemsDto> getResults() {
 		return results;
 	}
 }

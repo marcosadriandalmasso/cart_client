@@ -12,8 +12,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
+import com.globant.carrito.client.Clients;
 import com.globant.carrito.product.Items;
 
 
@@ -25,13 +26,10 @@ public class Carts {
 	private int cartId;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	private int clientId;
+	private Clients client;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
 	private Set<Items> items;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	private int paymentId;
 	
 	@Column
 	private Date date;
@@ -54,6 +52,12 @@ public class Carts {
 		
 	}
 	
+	public Carts(Clients client) {
+		this.client = client;
+		items = new HashSet<Items>();
+		status = true;
+	}
+
 	public Carts(Items... initialItems) {
 		items = new HashSet<Items>();
 		for (Items item : initialItems) {
@@ -67,28 +71,12 @@ public class Carts {
 		item.setCart(this);
 	}
 
-	public int getClientId() {
-		return clientId;
-	}
-
-	public void setClientId(int clientId) {
-		this.clientId = clientId;
-	}
-
 	public Set<Items> getItems() {
 		return items;
 	}
 
 	public void setItems(Set<Items> items) {
 		this.items = items;
-	}
-
-	public int getPaymentId() {
-		return paymentId;
-	}
-
-	public void setPaymentId(int paymentId) {
-		this.paymentId = paymentId;
 	}
 
 	public Date getDate() {
