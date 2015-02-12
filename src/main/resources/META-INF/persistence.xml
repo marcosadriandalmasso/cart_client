@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence 
+    http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+  version="1.0">
+  <persistence-unit name="db">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>com.globant.carrito.product.Items</class>
+    <class>com.globant.carrito.client.Clients</class>
+    <class>com.globant.carrito.cart.Carts</class>
+    <class>com.globant.carrito.product.Product</class>
+    <properties>
+      <!-- Esto genera/actualiza las tablas -->
+      <property name="hibernate.hbm2ddl.auto" value="update" />
+      <!-- Esto sirve si quieren ver en el log el SQL que se genera -->
+      <property name="hibernate.show_sql" value="true" />
+       
+      <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
+      <property name="hibernate.connection.password" value="admin" />
+      <property name="hibernate.connection.url" value="jdbc:mysql://localhost/shoppcart" />
+      <property name="hibernate.connection.username" value="admin" />
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+    </properties>
+  </persistence-unit>
+</persistence>
