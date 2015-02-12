@@ -31,8 +31,7 @@ public class ProductService {
 		for(Product p : query.getResultList()) {
 			response.getResults().add(p);
 		}
-//		response.getResults().add(new Product(123, "Coca cola", 15.5));
-//		response.getResults().add(new Product(456, "Fernet", 87.30));
+		em.close();
 		return response;
 	}
 }

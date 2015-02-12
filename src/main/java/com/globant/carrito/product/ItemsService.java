@@ -25,15 +25,6 @@ public class ItemsService {
 	EntityManagerFactory emf = Persistence
 			.createEntityManagerFactory("db");
 	
-	@RequestMapping(value = "/service/getItem", method = RequestMethod.GET)
-	@ResponseBody
-	public Items getItem(String name) {
-		EntityManager em = emf.createEntityManager();
-		Items i = em.find(Items.class, name);
-		em.close();
-		return i;
-	}
-	
 	@RequestMapping(value = "/service/newItem/{prodId}", method = RequestMethod.GET)
 	@ResponseBody
 	public StatusDto newItem(@PathVariable("prodId") Integer prodId,HttpSession session) {
@@ -45,7 +36,7 @@ public class ItemsService {
 			
 			Carts cart = getCart(session, em);
 
-			boolean found = false;
+			boolean found = false; // Flag for checking if the item to add already exists in cart.
 			for(Items i : cart.getItems()){
 				if(i.getProduct().getId() == (prodId)){
 					i.setQty(i.getQty()+1);
@@ -53,12 +44,10 @@ public class ItemsService {
 					break;
 				}
 			}
-			if(!found){
+			if(!found){ // If the item to add is not currently in the cart, creates a new instance
 				Product product = em.find(Product.class, prodId);
 				cart.addItem(new Items(product.getPrice(), product, 1));
 			}
-			
-			
 			em.persist(cart);
 			tx.commit();
 			return new StatusDto(true);
@@ -78,7 +67,7 @@ public class ItemsService {
 	public StatusDto removeItem(@PathVariable("prodId") Integer prodId,HttpSession session) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = null;
-		try {			
+		try {
 			tx = em.getTransaction();
 			tx.begin();
 			
@@ -87,10 +76,12 @@ public class ItemsService {
 			for(Items i : cart.getItems()){
 				if(i.getProduct().getId() == (prodId) && i.getQty() > 0){
 					i.setQty(i.getQty()-1);
+					if(i.getQty() == 0){ // If the item removed has quantity = 0, then remove it from the client´s cart
+						cart.removeItem(i);
+					}
 					break;
 				}
 			}
-			
 			em.persist(cart);
 			tx.commit();
 			return new StatusDto(true);
@@ -118,18 +109,24 @@ public class ItemsService {
 		return resp;
 	}
 	
-	private String getUserName(HttpSession session) {
+	private String getUsername(HttpSession session) {
 		return (String)session.getAttribute(SecurityService.USERNAME);
 	}
 	
+	/**
+	 * 
+	 * @param session
+	 * @param em
+	 * @return The cart assigned to the Client. If not found, it creates a new one.
+	 */
 	private Carts getCart(HttpSession session, EntityManager em) {
 		try {
-			TypedQuery<Carts> query = em.createQuery("select c from Carts c where c.client.userName = :username and c.status = true", Carts.class);
-			query.setParameter("username", getUserName(session));
+			TypedQuery<Carts> query = em.createQuery("select c from Carts c where c.client.username = :username and c.status = true", Carts.class);
+			query.setParameter("username", getUsername(session));
 			return query.getSingleResult();
 		} catch (NoResultException e) {
-			TypedQuery <Clients> query = em.createQuery("select c from Clients c where c.userName = :username", Clients.class);
-			query.setParameter("username", getUserName(session));
+			TypedQuery <Clients> query = em.createQuery("select c from Clients c where c.username = :username", Clients.class);
+			query.setParameter("username", getUsername(session));
 			return new Carts(query.getSingleResult());
 		}
 	}

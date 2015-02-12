@@ -32,8 +32,8 @@ public class SecurityService {
 		String username = dto.getUsername();
 		
 		try {
-		    TypedQuery<Clients> query = em.createQuery("from Clients c where c.userName = :userName", Clients.class);
-		        query.setParameter("userName", username);
+		    TypedQuery<Clients> query = em.createQuery("from Clients c where c.username = :username", Clients.class);
+		        query.setParameter("username", username);
 		        Clients client = query.getSingleResult();
 		        boolean isValid = dto.getPassword().equals(client.getPassword());
 		        if (isValid) {
@@ -41,10 +41,9 @@ public class SecurityService {
 		        }
 		        return new StatusDto(isValid);
 		} catch (NoResultException e) {
-		               return new StatusDto(false);
+			return new StatusDto(false);
 		} finally {
-		              // El finally se invoca igual, aunque haya un return.
-		               em.close();
+			em.close();
 		}
 	}
 	

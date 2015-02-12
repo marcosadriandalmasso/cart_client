@@ -21,6 +21,8 @@ import com.globant.carrito.product.Items;
 @Entity
 public class Carts {
 	
+	// ATTRIBUTES
+	
 	@Id
 	@GeneratedValue
 	private int cartId;
@@ -48,6 +50,8 @@ public class Carts {
 	@Column
 	private boolean status;
 	
+	// CONSTRUCTORS
+	
 	public Carts(){
 		
 	}
@@ -65,50 +69,42 @@ public class Carts {
 		}
 	}
 	
+	// ADITIONAL METHODS
+	/**
+	 * Method called from ItemsService to add items to client´s cart
+	 * @param item
+	 */
 	public void addItem(Items item) {
 		items.add(item);
-		// Esto es necesario para que cargue la "clave foranea"
+		// Esto es necesario para que cargue la "clave foranea" (Lautaro)
+		item.setCart(this);
+	}
+	
+	/**
+	 * Method called from ItemsService to remove items from client´s cart when item quantity is equals to 0
+	 * @param item
+	 */
+	public void removeItem(Items item) {
+		items.remove(item);
 		item.setCart(this);
 	}
 
+	// GETTERS
+	
 	public Set<Items> getItems() {
 		return items;
-	}
-
-	public void setItems(Set<Items> items) {
-		this.items = items;
 	}
 
 	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
 	public double getCartPrice() {
 		return cartPrice;
 	}
 
-	public void setCartPrice(double cartPrice) {
-		this.cartPrice = cartPrice;
-	}
-
 	public PaymentTypes getPaymentType() {
 		return paymentType;
-	}
-
-	public void setPaymentType(PaymentTypes paymentType) {
-		this.paymentType = paymentType;
-	}
-
-	public boolean isStatus() {
-		return status;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
 	}
 
 	public int getCartId() {
@@ -118,5 +114,14 @@ public class Carts {
 	public int getTransactionNumber() {
 		return transactionNumber;
 	}
+
+	public boolean isStatus() {
+		return status;
+	}
 	
+	// SETTERS
+	
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 }

@@ -12,6 +12,7 @@ import com.globant.carrito.cart.Carts;
 @Entity
 public class Items {
 	
+	// ATTRIBUTES
 	@Id
 	@GeneratedValue
 	private int itemId;
@@ -22,24 +23,13 @@ public class Items {
 	@Column
 	private int qty;
 
-	public int getQty() {
-		return qty;
-	}
-
-	public void setQty(int qty) {
-		this.qty = qty;
-	}
-
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Carts cart;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Product product;
-	
-	public Product getProduct() {
-		return product;
-	}
 
+	// CONSTRUCTORS
 	public Items() {
 		
 	}
@@ -50,24 +40,42 @@ public class Items {
 		this.qty = qty;
 	}
 
+	// GETTERS
+	public int getItemId() {
+		return itemId;
+	}
+	
 	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public int getItemId() {
-		return itemId;
+	public int getQty() {
+		return qty;
 	}
 
 	public Carts getCart() {
 		return cart;
 	}
 
+	public Product getProduct() {
+		return product;
+	}
+
+	// SETTERS
+	/**
+	 * Setter for updating quantity when adding/removing Items to cart. Called from ItemsService
+	 * @param qty
+	 * 
+	 */
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+
+	/**
+	 * Setter for assigning a new cart. Called from Carts 
+	 * @param cart
+	 */
 	public void setCart(Carts cart) {
 		this.cart = cart;
 	}
-	
 }
