@@ -46,7 +46,9 @@ public class ItemService {
 			}
 			if(!found){ // If the item to add is not currently in the cart, creates a new instance
 				Product product = em.find(Product.class, prodId);
-//				if (product == null) ..... test con producto que no existe
+				if (product == null) {
+					return new StatusDto(false);
+				}
 				cart.addItem(new Item(product.getPrice(), product, 1));
 			}
 			em.persist(cart);

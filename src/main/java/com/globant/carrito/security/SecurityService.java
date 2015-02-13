@@ -32,7 +32,7 @@ public class SecurityService {
 		String username = dto.getUsername();
 		
 		try {
-		    TypedQuery<Client> query = em.createQuery("from Clients c where c.username = :username", Client.class);
+		    TypedQuery<Client> query = em.createQuery("from Client c where c.username = :username", Client.class);
 		        query.setParameter("username", username);
 		        Client client = query.getSingleResult();
 		        boolean isValid = dto.getPassword().equals(client.getPassword());

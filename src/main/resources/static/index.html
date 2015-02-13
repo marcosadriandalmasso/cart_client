@@ -31,11 +31,11 @@
 					"password": $("#password").val()
 				},
 				function(data) {
-						if (data.status) {
-							goToCart();
-						} else {
-							alert("Login error");
-						}
+					if (data.status) {
+						goToCart();
+					} else {
+						alert("Login error");
+					}
 				}
 				);
 		}
@@ -55,11 +55,11 @@
 					"mailist": mailistValue
 				},
 				function(data) {
-						if (data.status) {
-							loginPage();
-						} else {
-							alert("Error creating new client");
-						}
+					if (data.status) {
+						();
+					} else {
+						alert("Error creating new client");
+					}
 				}
 			);
 		}
