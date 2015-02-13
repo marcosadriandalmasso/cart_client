@@ -48,7 +48,9 @@ public class SecurityService {
 	}
 	
 	@RequestMapping(value = "/service/logout", method=RequestMethod.POST)
-	public void logout(HttpSession session) {
+	@ResponseBody
+	public StatusDto logout(HttpSession session) {
 		session.invalidate();
+		return new StatusDto(true);
 	}
 }

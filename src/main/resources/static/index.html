@@ -39,6 +39,20 @@
 				}
 				);
 		}
+		function logout() {
+			post('service/logout',
+				{
+					"username": $("#username").val()
+				},
+				function(data) {
+					if (data.status) {
+						goToLogin();
+					} else {
+						alert("Logout error");
+					}
+				}
+				);
+		}
 		function newClient() {
 			var mailistValue = false;
 			if ($("#mailist").is(":checked")){
@@ -56,7 +70,7 @@
 				},
 				function(data) {
 					if (data.status) {
-						();
+						goToCart();
 					} else {
 						alert("Error creating new client");
 					}
@@ -190,6 +204,7 @@
 				<input type="checkbox" id="mailist" value="" />
 			</div>
 			<input type="button" id="createClient" value="Create" onclick="newClient();" />
+			<input type="button" id="login" value="Volver" onclick="goToLogin();" />
 		</div>
 		<div data-role="footer">
 			<h4>(c) 2015 Los Borbotones Software Company Inc.</h4>
@@ -204,7 +219,7 @@
 			<input type='button' value='Refrescar' onclick="refreshCart();" />
 			<input type='button' value='Productos' onclick="goToProducts();" />
 			<input type='button' value='Checkout' onclick="checkout();" />
-			<input type='button' value='Logout' onclick="goToLogin();" />
+			<input type='button' value='Logout' onclick="logout();" />
 			<ul data-role="listview" id="cartList" style="margin-top: 10px"/>
 		</div>
 		<div data-role="footer">
