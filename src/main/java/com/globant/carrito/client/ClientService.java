@@ -3,7 +3,9 @@ package com.globant.carrito.client;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,7 +40,19 @@ public class ClientService {
 				.createEntityManagerFactory("db");
 
 		EntityManager em = emf.createEntityManager();
+		String username = clientDto.getUsername();
 		
+		// Query for checking whether the provided username exists
+		TypedQuery<Client> query = em.createQuery("SELECT DISTINCT c FROM Client c WHERE c.username = :username", Client.class);
+		query.setParameter("username", username);
+
+		// If provided username exists, then return false.
+		try { 
+			query.getSingleResult();
+			return new StatusDto(false);
+		
+		// If provided username does not exist, then creates the new client.
+		} catch (NoResultException e) { 
 			EntityTransaction tx = null;
 			try {
 				tx = em.getTransaction();
@@ -46,9 +60,10 @@ public class ClientService {
 				Client emc = new Client(clientDto.getName(), clientDto.getUsername(), clientDto.getPassword(), clientDto.getShippingAddress(), clientDto.getTelephone(), clientDto.getEmail(), clientDto.isMailist());
 				em.persist(emc);
 				tx.commit();
+				// Assigns the username to the session to keep the new client logged in.
 				session.setAttribute(USERNAME, clientDto.getUsername());
 				return new StatusDto(true);
-			} catch (RuntimeException e) {
+			} catch (RuntimeException e1) {
 				if (tx != null && tx.isActive()) {
 					tx.rollback();
 				}
@@ -56,6 +71,7 @@ public class ClientService {
 			} finally {
 				em.close();
 			}
+		}
 	}
 	
 	@RequestMapping(value = "/service/removeClient", method = RequestMethod.GET)

@@ -72,7 +72,7 @@
 					if (data.status) {
 						goToCart();
 					} else {
-						alert("Error creating new client");
+						alert("Username already exist. Please try with another one.");
 					}
 				}
 			);
@@ -84,7 +84,7 @@
 				for (itemPos in data.results) {
 					item = data.results[itemPos];
 					var row = $("<li>");
-					row.append(item.quantity + " " + item.productName + " - $" + item.amount * item.quantity);
+					row.append(item.productName + " | " + "Quantity: " + item.quantity + " " + " | Subtotal: $" + item.amount * item.quantity);
 					row.append("&nbsp;");
 					row.append($("<input type='button' value='-' onClick='removeProduct(" + item.productId+ ");'>"));
 					row.append($("<input type='button' value='+' onClick='addProduct(" + item.productId + ");'>"));
