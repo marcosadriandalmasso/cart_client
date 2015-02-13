@@ -9,10 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.globant.carrito.cart.Carts;
+import com.globant.carrito.cart.Cart;
 
 @Entity
-public class Clients {
+public class Client {
 
 	// ATTRIBUTES
 	
@@ -42,15 +42,15 @@ public class Clients {
 	private boolean mailist;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
-	private List<Carts> cart;
+	private List<Cart> cart;
 
 	// CONSTRUCTORS
 	
-	public Clients() {
+	public Client() {
 		
 	}
 	
-	public Clients(String name, String username, String password,
+	public Client(String name, String username, String password,
 			String shippingAddress, String telephone, String email,
 			boolean mailist) {
 		this.name = name;
@@ -124,7 +124,7 @@ public class Clients {
 //		this.mailist = mailist;
 //	}
 
-	public List<Carts> getCart() {
+	public List<Cart> getCart() {
 		return cart;
 	}
 

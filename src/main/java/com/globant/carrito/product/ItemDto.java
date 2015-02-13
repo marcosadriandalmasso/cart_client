@@ -1,14 +1,12 @@
 package com.globant.carrito.product;
 
-public class ItemsDto {
+public class ItemDto {
 
 	private int quantity;
 	private String productName;
 	private double amount;
 	private int productId;
-	public ItemsDto(int quantity, String productName, double amount,
-			int productId) {
-		super();
+	public ItemDto (int quantity, String productName, double amount, int productId) {
 		this.quantity = quantity;
 		this.productName = productName;
 		this.amount = amount;
@@ -26,6 +24,4 @@ public class ItemsDto {
 	public int getProductId() {
 		return productId;
 	}
-	
-
 }

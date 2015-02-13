@@ -7,10 +7,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import com.globant.carrito.cart.Carts;
+import com.globant.carrito.cart.Cart;
 
 @Entity
-public class Items {
+public class Item {
 	
 	// ATTRIBUTES
 	@Id
@@ -24,17 +24,17 @@ public class Items {
 	private int qty;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	private Carts cart;
+	private Cart cart;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Product product;
 
 	// CONSTRUCTORS
-	public Items() {
-		
+	public Item() {
+
 	}
 	
-	public Items(double price, Product product, int qty) {
+	public Item(double price, Product product, int qty) {
 		this.price = price;
 		this.product = product;
 		this.qty = qty;
@@ -53,7 +53,7 @@ public class Items {
 		return qty;
 	}
 
-	public Carts getCart() {
+	public Cart getCart() {
 		return cart;
 	}
 
@@ -75,7 +75,7 @@ public class Items {
 	 * Setter for assigning a new cart. Called from Carts 
 	 * @param cart
 	 */
-	public void setCart(Carts cart) {
+	public void setCart(Cart cart) {
 		this.cart = cart;
 	}
 }

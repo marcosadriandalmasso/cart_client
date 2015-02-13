@@ -5,8 +5,8 @@ import java.util.List;
 
 public class ClientResponse {
 
-	private List<Clients> results = new ArrayList<Clients>();
-	public List<Clients> getResults() {
+	private List<Client> results = new ArrayList<Client>();
+	public List<Client> getResults() {
 		return results;
 	}
 }

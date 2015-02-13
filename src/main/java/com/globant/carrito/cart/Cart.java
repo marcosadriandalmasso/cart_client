@@ -14,12 +14,12 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.globant.carrito.client.Clients;
-import com.globant.carrito.product.Items;
+import com.globant.carrito.client.Client;
+import com.globant.carrito.product.Item;
 
 
 @Entity
-public class Carts {
+public class Cart {
 	
 	// ATTRIBUTES
 	
@@ -28,10 +28,10 @@ public class Carts {
 	private int cartId;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	private Clients client;
+	private Client client;
 	
 	@OneToMany(cascade = CascadeType.ALL)
-	private Set<Items> items;
+	private Set<Item> items;
 	
 	@Column
 	private Date date;
@@ -52,19 +52,19 @@ public class Carts {
 	
 	// CONSTRUCTORS
 	
-	public Carts(){
+	public Cart(){
 		
 	}
 	
-	public Carts(Clients client) {
+	public Cart(Client client) {
 		this.client = client;
-		items = new HashSet<Items>();
+		items = new HashSet<Item>();
 		status = true;
 	}
 
-	public Carts(Items... initialItems) {
-		items = new HashSet<Items>();
-		for (Items item : initialItems) {
+	public Cart(Item... initialItems) {
+		items = new HashSet<Item>();
+		for (Item item : initialItems) {
 			addItem(item);
 		}
 	}
@@ -74,7 +74,7 @@ public class Carts {
 	 * Method called from ItemsService to add items to client´s cart
 	 * @param item
 	 */
-	public void addItem(Items item) {
+	public void addItem(Item item) {
 		items.add(item);
 		// Esto es necesario para que cargue la "clave foranea" (Lautaro)
 		item.setCart(this);
@@ -84,14 +84,14 @@ public class Carts {
 	 * Method called from ItemsService to remove items from client´s cart when item quantity is equals to 0
 	 * @param item
 	 */
-	public void removeItem(Items item) {
+	public void removeItem(Item item) {
 		items.remove(item);
-		item.setCart(this);
+		item.setCart(null);
 	}
 
 	// GETTERS
 	
-	public Set<Items> getItems() {
+	public Set<Item> getItems() {
 		return items;
 	}
 

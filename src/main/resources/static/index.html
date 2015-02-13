@@ -47,8 +47,8 @@
 			post('service/newClient',
 				{
 					"name": $("#name").val(),
-					"username": $("#username").val(),
-					"password": $("#password").val(),
+					"username": $("#newusername").val(),
+					"password": $("#newpassword").val(),
 					"shippingAddress": $("#shippingAddress").val(),
 					"telephone": $("#telephone").val(),
 					"email": $("#email").val(),
@@ -56,7 +56,7 @@
 				},
 				function(data) {
 						if (data.status) {
-							goToCart();
+							loginPage();
 						} else {
 							alert("Error creating new client");
 						}
@@ -177,9 +177,9 @@
 				<label for="name">Name:</label>
 				<input type="text" id="name" value="" />
 				<label for="username">Username:</label>
-				<input type="text" id="username" value="" />
+				<input type="text" id="newusername" value="" />
 				<label for="password">Password:</label>
-				<input type="password" id="password" value="" />
+				<input type="password" id="newpassword" value="" />
 				<label for="shippingAddress">Shipping address:</label>
 				<input type="text" id="shippingAddress" value="" />
 				<label for="telephone">Telephone:</label>

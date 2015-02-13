@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.globant.carrito.StatusDto;
-import com.globant.carrito.client.Clients;
+import com.globant.carrito.client.Client;
 
 @RestController
 public class SecurityService {
@@ -32,9 +32,9 @@ public class SecurityService {
 		String username = dto.getUsername();
 		
 		try {
-		    TypedQuery<Clients> query = em.createQuery("from Clients c where c.username = :username", Clients.class);
+		    TypedQuery<Client> query = em.createQuery("from Clients c where c.username = :username", Client.class);
 		        query.setParameter("username", username);
-		        Clients client = query.getSingleResult();
+		        Client client = query.getSingleResult();
 		        boolean isValid = dto.getPassword().equals(client.getPassword());
 		        if (isValid) {
 		        	session.setAttribute(USERNAME, username);

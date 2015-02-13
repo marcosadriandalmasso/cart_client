@@ -6,9 +6,9 @@
   version="1.0">
   <persistence-unit name="db">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <class>com.globant.carrito.product.Items</class>
-    <class>com.globant.carrito.client.Clients</class>
-    <class>com.globant.carrito.cart.Carts</class>
+    <class>com.globant.carrito.product.Item</class>
+    <class>com.globant.carrito.client.Client</class>
+    <class>com.globant.carrito.cart.Cart</class>
     <class>com.globant.carrito.product.Product</class>
     <properties>
       <!-- Esto genera/actualiza las tablas -->

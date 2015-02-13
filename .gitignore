@@ -11,9 +11,9 @@ hs_err_pid*
 
 # Eclipse files
 .settings
-.project
+#.project
 .classpath
-META-INF
+#META-INF
 
 # Maven files
 target

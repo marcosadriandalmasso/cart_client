@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.globant.carrito.StatusDto;
-import com.globant.carrito.cart.Carts;
-import com.globant.carrito.client.Clients;
+import com.globant.carrito.cart.Cart;
+import com.globant.carrito.client.Client;
 import com.globant.carrito.security.SecurityService;
 
 @RestController
-public class ItemsService {
+public class ItemService {
 
 	EntityManagerFactory emf = Persistence
 			.createEntityManagerFactory("db");
@@ -34,11 +34,11 @@ public class ItemsService {
 			tx = em.getTransaction();
 			tx.begin();
 			
-			Carts cart = getCart(session, em);
+			Cart cart = getCart(session, em);
 
 			boolean found = false; // Flag for checking if the item to add already exists in cart.
-			for(Items i : cart.getItems()){
-				if(i.getProduct().getId() == (prodId)){
+			for(Item i : cart.getItems()){
+				if(i.getProduct().getId() == prodId){
 					i.setQty(i.getQty()+1);
 					found = true;
 					break;
@@ -46,7 +46,8 @@ public class ItemsService {
 			}
 			if(!found){ // If the item to add is not currently in the cart, creates a new instance
 				Product product = em.find(Product.class, prodId);
-				cart.addItem(new Items(product.getPrice(), product, 1));
+//				if (product == null) ..... test con producto que no existe
+				cart.addItem(new Item(product.getPrice(), product, 1));
 			}
 			em.persist(cart);
 			tx.commit();
@@ -64,19 +65,19 @@ public class ItemsService {
 	
 	@RequestMapping(value = "/service/removeItem/{prodId}", method = RequestMethod.GET)
 	@ResponseBody
-	public StatusDto removeItem(@PathVariable("prodId") Integer prodId,HttpSession session) {
+	public StatusDto removeItem(@PathVariable("prodId") Integer prodId, HttpSession session) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = null;
 		try {
 			tx = em.getTransaction();
 			tx.begin();
 			
-			Carts cart = getCart(session, em);
+			Cart cart = getCart(session, em);
 
-			for(Items i : cart.getItems()){
-				if(i.getProduct().getId() == (prodId) && i.getQty() > 0){
+			for(Item i : cart.getItems()){
+				if (i.getProduct().getId() == prodId && (i.getQty() > 0)) {
 					i.setQty(i.getQty()-1);
-					if(i.getQty() == 0){ // If the item removed has quantity = 0, then remove it from the client´s cart
+					if(i.getQty() == 0){ // If the item removed has quantity = 0, then remove it from client´s cart
 						cart.removeItem(i);
 					}
 					break;
@@ -98,12 +99,12 @@ public class ItemsService {
 	
 	@RequestMapping(value = "/service/getCart", method = RequestMethod.GET)
 	@ResponseBody
-	public ItemsResponse getCart(HttpSession session) {
+	public ItemResponse getCart(HttpSession session) {
 		EntityManager em = emf.createEntityManager();
-		Carts c = getCart(session, em);
-		ItemsResponse resp = new ItemsResponse();
-		for(Items i : c.getItems()){
-			resp.getResults().add(new ItemsDto(i.getQty(), i.getProduct().getName(), i.getPrice(), i.getProduct().getId()));
+		Cart c = getCart(session, em);
+		ItemResponse resp = new ItemResponse();
+		for(Item i : c.getItems()){
+			resp.getResults().add(new ItemDto(i.getQty(), i.getProduct().getName(), i.getPrice(), i.getProduct().getId()));
 		}
 		em.close();
 		return resp;
@@ -119,15 +120,15 @@ public class ItemsService {
 	 * @param em
 	 * @return The cart assigned to the Client. If not found, it creates a new one.
 	 */
-	private Carts getCart(HttpSession session, EntityManager em) {
+	private Cart getCart(HttpSession session, EntityManager em) {
 		try {
-			TypedQuery<Carts> query = em.createQuery("select c from Carts c where c.client.username = :username and c.status = true", Carts.class);
+			TypedQuery<Cart> query = em.createQuery("select c from Cart c where c.client.username = :username and c.status = true", Cart.class);
 			query.setParameter("username", getUsername(session));
 			return query.getSingleResult();
 		} catch (NoResultException e) {
-			TypedQuery <Clients> query = em.createQuery("select c from Clients c where c.username = :username", Clients.class);
+			TypedQuery <Client> query = em.createQuery("select c from Client c where c.username = :username", Client.class);
 			query.setParameter("username", getUsername(session));
-			return new Carts(query.getSingleResult());
+			return new Cart(query.getSingleResult());
 		}
 	}
 	
@@ -141,7 +142,7 @@ public class ItemsService {
 			tx = em.getTransaction();
 			tx.begin();
 			
-			Carts cart = getCart(session, em);
+			Cart cart = getCart(session, em);
 			cart.setStatus(false);
 			em.persist(cart);
 			tx.commit();
